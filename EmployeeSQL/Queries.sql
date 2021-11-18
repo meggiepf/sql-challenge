@@ -24,35 +24,45 @@ ON (dept_manager."Department Number" = departments."Department Number")
 
 -- Question 4 List the department of each employee with the following information: 
 -- employee number, last name, first name, and department name.
+SELECT employees."Employee Number", employees."First Name", employees."Last Name",  departments."Department Name"
+from employees
+join dept_emp
+ON (employees."Employee Number" = dept_emp."Employee Number")
+join departments
+ON (dept_emp."Department Number" = departments."Department Number")
+;
 
 -- Question 5 List first name, last name, and sex for employees whose first name is "Hercules" 
 -- and last names begin with "B."
+SELECT employees."First Name", employees."Last Name", employees."Sex"
+FROM employees
+WHERE "First Name" = 'Hercules' AND "Last Name" like 'B%'
+;
 
 -- Question 6 List all employees in the Sales department, including their employee number, last name, first name, and department name.
 
+SELECT employees."Employee Number", employees."First Name", employees."Last Name",  departments."Department Name"
+from employees
+join dept_emp
+ON (employees."Employee Number" = dept_emp."Employee Number")
+join departments
+ON (dept_emp."Department Number" = departments."Department Number")
+WHERE "Department Name" = 'Sales'
+;
+
 --Question 7 List all employees in the Sales and Development departments, including their employee number, last name, first name, and department name.
+SELECT employees."Employee Number", employees."First Name", employees."Last Name",  departments."Department Name"
+from employees
+join dept_emp
+ON (employees."Employee Number" = dept_emp."Employee Number")
+join departments
+ON (dept_emp."Department Number" = departments."Department Number")
+WHERE (departments."Department Name" = 'Sales') OR (departments."Department Name" = 'Development')
+;
 
 --Question 8 In descending order, list the frequency count of employee last names, i.e., how many employees share each last name.
-
-Select "Employee Number", "Last Name", "First Name", "Sex", "Salary" FROM employees
-
-Select "Employee Number", "Last Name", "First Name", "Sex", "Salary" FROM(
-SELECT employees."Employee Number", employees."Title ID", "Birth Date", "First Name", "Last Name", "Sex", "Hire Date"
+SELECT "Last Name", COUNT (*)
 FROM employees
-JOIN salaries ON
-employees."Employee Number" = salaries."Employee Number");
-
-SELECT departments."Department Number", departments."Department Name"
-FROM dept_manager
-INNER JOIN departments ON
-dept_manager."Department Number"=departments."Department Number";
-
-SELECT employees."Employee Number", employees."Title ID", "Birth Date", "First Name", "Last Name", "Sex", "Hire Date"
-FROM employees
-JOIN dept_emp ON
-employees."Employee Number" = dept_emp."Employee Number";
-
-SELECT departments."Department Number", departments."Department Name", dept_manager."Employee Number"
-FROM departments
-JOIN dept_manager ON
-dept_manager."Department Number"=departments."Department Number";
+GROUP BY "Last Name"
+HAVING COUNT(*) > 1
+ORDER BY COUNT DESC;
